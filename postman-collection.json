@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "0db420dd-86a7-4c6d-8a65-bceb3058e2b8",
+		"name": "CT Postman Integrationstests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3660533",
+		"_collection_link": "https://edactgbr.postman.co/workspace/c't~e7f81c7b-01dd-4273-83d9-a7385a5204f4/collection/3660533-0db420dd-86a7-4c6d-8a65-bceb3058e2b8?action=share&creator=3660533&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Räume auflisten",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Collection has three items\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.lengthOf(3);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/rooms",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Raum erstellen",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var moment = require('moment');",
+							"var tomorrow = moment().add(1, 'days').format();",
+							"pm.collectionVariables.set(\"tomorrow\", tomorrow);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = JSON.parse(responseBody);",
+							"pm.collectionVariables.set(\"roomId\", body.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \n   \"name\": \"Büro vom Chef\",\n   \"capacity\": 1,\n   \"category_id\": 2,\n   \"bookable\": false,\n   \"blocked_until\": \"{{tomorrow}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/rooms",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Raum abrufen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/rooms/{{roomId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"rooms",
+						"{{roomId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Raum aktualisieren",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \n   \"name\": \"kleiner Besprecher (renoviert)\",\n   \"capacity\": 5,\n   \"category_id\": 1,\n   \"bookable\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/rooms/{{roomId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"rooms",
+						"{{roomId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Raum-Attribut aktualisieren",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"capacity\": 7\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/rooms/{{roomId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"rooms",
+						"{{roomId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Raum löschen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/rooms/{{roomId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"rooms",
+						"{{roomId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "roomId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "tomorrow",
+			"value": ""
+		}
+	]
+}

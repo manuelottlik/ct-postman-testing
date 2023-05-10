@@ -1,0 +1,35 @@
+{
+ "rooms": [
+  {
+   "id": 1,
+   "name": "kleiner Besprecher",
+   "capacity": 10,
+   "category_id": 1,
+   "bookable": true
+  },
+  {
+   "id": 2,
+   "name": "großer Besprecher",
+   "capacity": 25,
+   "category_id": 1,
+   "bookable": true
+  },
+  {
+   "id": 3,
+   "name": "Büro der Mitarbeiter",
+   "capacity": 5,
+   "category_id": 2,
+   "bookable": false
+  }
+ ],
+ "categories": [
+  {
+   "id": 1,
+   "name": "Besprechungsraum"
+  },
+  {
+   "id": 2,
+   "name": "Büro"
+  }
+ ]
+}
